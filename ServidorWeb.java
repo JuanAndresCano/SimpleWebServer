@@ -4,6 +4,10 @@
 import java.io.* ;
 import java.net.* ;
 import java.util.* ;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public final class ServidorWeb{
         public static void main(String argv[]) throws Exception{
@@ -15,7 +19,8 @@ public final class ServidorWeb{
                 ServerSocket socketdeEscucha = new ServerSocket(puerto);
                 
                 
-                
+                ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
+
                 while (true) {
                     // Escuhando las solicitudes de conexión TCP.
                     // Procesando las solicitudes HTTP en un ciclo infinito.
@@ -29,8 +34,9 @@ public final class ServidorWeb{
                         // Crea un nuevo hilo para procesar la solicitud.
                         Thread hilo = new Thread(solicitud);
 
+                        executor.execute(hilo);
                         // Inicia el hilo.
-                        hilo.start();
+                        //hilo.start();
                 }
         }
 }
